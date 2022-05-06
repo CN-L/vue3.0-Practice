@@ -1,7 +1,7 @@
 <template>
   <!-- <nav> -->
     <!-- 在模版对面它会将ref对象直接把值展示出来，所以不需要写.value -->
-    {{conut}}<span @click="changeCount">👍</span>
+    {{count}}<span @click="increase">👍</span>
     {{double}}
     <!-- <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> -->
@@ -9,11 +9,22 @@
   <router-view/>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-
+import { defineComponent, ref, computed, reactive, toRefs } from 'vue'
+interface DataProps {
+  count: number,
+  double: number,
+  increase: ()=> void
+}
 export default defineComponent({
   setup () {
+    // ref 一般用于原始类型
     const conut = ref(0)
+    // 一般用于复杂类型
+    const form: DataProps = reactive({
+      count: 0,
+      increase: () => { form.count++ },
+      double: computed(() => form.count * 2)
+    })
     // 使用计算属性
     const changeCount = () => {
       conut.value++
@@ -21,10 +32,12 @@ export default defineComponent({
     const double = computed(() => {
       return conut.value * 2
     })
+    const toRefData = toRefs(form)//解构后丧失响应性 ，toRefs可保持响应式
     return {
-      conut,
-      double,
-      changeCount
+      ...toRefData
+      // conut,
+      // double,
+      // changeCount
     }
   }
 })
