@@ -9,14 +9,15 @@
       <li v-for="number in numbers" :key="number">{{number}}</li>
     </ul>
     <h1>{{person.name}}</h1>
-    <!-- <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> -->
+    <h2>{{result}}</h2>
+    <img :src="result[0].url" alt="">
   <!-- </nav> -->
   <router-view/>
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted } from 'vue'
 import useMousePosition from '@/hooks/useMousePosition'
+import useUrlLoader from '@/hooks/useUrlLoaders'
 interface DataProps {
   count: number,
   double: number,
@@ -26,11 +27,24 @@ interface DataProps {
   }
   increase: ()=> void
 }
+interface NoResult {
+ message: string,
+ status: string
+
+}
+interface Catresult {
+  id: string,
+  url: string,
+  width: number,
+  height: number,
+  breeds: any[],
+
+}
 export default defineComponent({
   setup () {
-    onMounted(() => {
-      console.log('mouted')
-    })
+    // onMounted(() => {
+    const { result, loading } = useUrlLoader<Catresult[]>('https://api.thecatapi.com/v1/images/search')
+    // })
     onUpdated(() => {
       console.log('updated')
     })
@@ -73,7 +87,9 @@ export default defineComponent({
       ...toRefData,
       updaetGreenying,
       x,
-      y
+      y,
+      result,
+      loading
       // conut,
       // double,
       // changeCount
