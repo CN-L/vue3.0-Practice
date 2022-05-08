@@ -11,6 +11,14 @@
     <h1>{{person.name}}</h1>
     <h2>{{result}}</h2>
     <img :src="result[0].url" alt="">
+    <my-modal @close-modal="closeModal" :isOpen="modalIsOpen">
+      my Modal!!!
+    </my-modal>
+    <div>
+      {{modalIsOpen}}
+      <button @click="openModal">点击开启</button>
+    </div>
+
   <!-- </nav> -->
   <router-view/>
 </template>
@@ -18,6 +26,7 @@
 import { defineComponent, ref, computed, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted } from 'vue'
 import useMousePosition from '@/hooks/useMousePosition'
 import useUrlLoader from '@/hooks/useUrlLoaders'
+import myModal from '@/components/Modal.vue'
 interface DataProps {
   count: number,
   double: number,
@@ -81,7 +90,13 @@ export default defineComponent({
     const double = computed(() => {
       return conut.value * 2
     })
-
+    const modalIsOpen = ref<boolean>(false)
+    const openModal = () => {
+      modalIsOpen.value = true
+    }
+    const closeModal = () => {
+      modalIsOpen.value = false
+    }
     const toRefData = toRefs(form)// 解构后丧失响应性 ，toRefs可保持响应式
     return {
       ...toRefData,
@@ -89,11 +104,17 @@ export default defineComponent({
       x,
       y,
       result,
+      modalIsOpen,
+      closeModal,
+      openModal,
       loading
       // conut,
       // double,
       // changeCount
     }
+  },
+  components: {
+    myModal
   }
 })
 </script>
