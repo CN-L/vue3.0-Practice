@@ -1,12 +1,14 @@
 <template>
   <div class="hello">
+    dajiahao
     <h1>{{ msg }}</h1>
+    <my-modal></my-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue' // defineComponent完全为了服务ts所存在
-
+import myModal from '@/components/Modal.vue'
 export default defineComponent({
   name: 'HelloWorld',
   props: {
@@ -14,6 +16,9 @@ export default defineComponent({
       required: true,
       type: String
     }
+  },
+  components: {
+    myModal
   },
   setup (props, context) {
     // props.msg
