@@ -1,6 +1,7 @@
 <template>
   <!-- <nav> -->
     <!-- 在模版对面它会将ref对象直接把值展示出来，所以不需要写.value -->
+    {{error}}
     {{count}}<span @click="increase">👍</span>
     <h1>{{x}},{{y}}</h1>
     <div>{{double}}</div>
@@ -18,15 +19,34 @@
       {{modalIsOpen}}
       <button @click="openModal">点击开启</button>
     </div>
+    <Suspense>
+      <template #default>
+        <AsyncShow></AsyncShow>
+         <!-- <dog-show></dog-show> -->
+      </template>
+      <template #fallback>
+        <h1>loading!</h1>
+      </template>
+    </Suspense>
+    <Suspense>
+      <template #default>
+        <dog-show></dog-show>
+      </template>
+      <template #fallback>
+        <h1>loading!</h1>
+      </template>
+    </Suspense>
 
   <!-- </nav> -->
   <router-view/>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted } from 'vue'
+import { defineComponent, ref, computed, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted, onErrorCaptured } from 'vue'
 import useMousePosition from '@/hooks/useMousePosition'
 import useUrlLoader from '@/hooks/useUrlLoaders'
 import myModal from '@/components/Modal.vue'
+import AsyncShow from '@/components/AsyncShow.vue'
+import DogShow from '@/components/Dogshow.vue'
 interface DataProps {
   count: number,
   double: number,
@@ -59,6 +79,11 @@ export default defineComponent({
     })
     onRenderTriggered((event) => {
       console.log('onRenderTriggered', event)
+    })
+    const error = ref(null)
+    onErrorCaptured((e:any) => {
+      error.value = e
+      return true
     })
     // ref 一般用于原始类型
     const conut = ref(0)
@@ -105,6 +130,7 @@ export default defineComponent({
       y,
       result,
       modalIsOpen,
+      error,
       closeModal,
       openModal,
       loading
@@ -114,7 +140,9 @@ export default defineComponent({
     }
   },
   components: {
-    myModal
+    myModal,
+    DogShow,
+    AsyncShow
   }
 })
 </script>
