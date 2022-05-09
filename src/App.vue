@@ -41,7 +41,7 @@
   <router-view/>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed, reactive, toRefs, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted, onErrorCaptured } from 'vue'
+import { defineComponent, ref, computed, reactive, toRefs, provide, onMounted, onUpdated, onRenderTriggered, watch, onUnmounted, onErrorCaptured } from 'vue'
 import useMousePosition from '@/hooks/useMousePosition'
 import useUrlLoader from '@/hooks/useUrlLoaders'
 import myModal from '@/components/Modal.vue'
@@ -90,7 +90,7 @@ export default defineComponent({
     // 一般用于复杂类型
     const form: DataProps = reactive({
       count: 0,
-      increase: () => { form.count++ },
+      increase: () => { form.count++; console.log(form.count, '测试') },
       double: computed(() => form.count * 2),
       numbers: [0, 1],
       person: {}
@@ -106,7 +106,6 @@ export default defineComponent({
     const { x, y } = toRefs(useMousePosition())
     // 监听
     watch([greeting, () => form.count], (newVal, oldVal) => {
-      console.log(newVal, oldVal)
       document.title = greeting.value
     })
     form.numbers[0] = 10
@@ -122,6 +121,7 @@ export default defineComponent({
     const closeModal = () => {
       modalIsOpen.value = false
     }
+    provide('lang', modalIsOpen)
     const toRefData = toRefs(form)// 解构后丧失响应性 ，toRefs可保持响应式
     return {
       ...toRefData,

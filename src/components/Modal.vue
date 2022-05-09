@@ -2,7 +2,7 @@
 <teleport to="#modal">
   <div v-if="isOpen" class="modal">
     <h2>
-      {{isOpen}}22
+      {{isOpen}}modal框{{niceBl}}
       <slot> this is a modal </slot>
     </h2>
     <button @click="buttonClik">关闭</button>
@@ -11,7 +11,7 @@
 
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 
 export default defineComponent({
   name: 'myModal',
@@ -22,10 +22,12 @@ export default defineComponent({
     'close-modal': null
   },
   setup (props, context) {
+    const niceBl = props
     const buttonClik = () => {
       context.emit('close-modal')
     }
     return {
+      niceBl,
       buttonClik
     }
   }

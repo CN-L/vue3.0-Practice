@@ -1,17 +1,24 @@
 <template>
   <div class="hello">
+    <h3>{{userLocation}} 任意门</h3>
     <h1>{{ msg }}</h1>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue' // defineComponent完全为了服务ts所存在
+import { defineComponent, inject } from 'vue' // defineComponent完全为了服务ts所存在
 export default defineComponent({
   name: 'HelloWorld',
   props: {
     msg: {
       required: true,
       type: String
+    }
+  },
+  setup () {
+    const userLocation = inject<boolean>('lang')
+    return {
+      userLocation
     }
   }
 })
