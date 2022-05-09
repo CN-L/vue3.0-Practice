@@ -110,7 +110,6 @@ export default defineComponent({
     })
     form.numbers[0] = 10
     form.person.name = '我是你爹'
-    // form.personw.age = 90
     const double = computed(() => {
       return conut.value * 2
     })
